@@ -1,0 +1,19 @@
+{
+  "treenit": [
+    {
+      "id": "0",
+      "laji": "pyöräily",
+      "kesto": 60
+    },
+    {
+      "id": "1",
+      "laji": "kuntosali",
+      "kesto": 45
+    },
+    {
+      "id": "2",
+      "laji": "juoksu",
+      "kesto": 30
+    }
+  ]
+}

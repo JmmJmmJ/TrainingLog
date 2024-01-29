@@ -1,16 +1,18 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import axios from 'axios'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 
 function App() {
-  const [treenit, setTreenit] = useState([
-    { id: 0, laji: 'pyöräily', kesto: 60 },
-    { id: 1, laji: 'kuntosali', kesto: 45 },
-    { id: 2, laji: 'juoksu', kesto: 30 },
-  ])
+  const [treenit, setTreenit] = useState([])
   const [uusiTreeni, setUusiTreeni] = useState(0)
-  const [Id, setId] = useState(3)
+
+  useEffect(() => {
+    axios.get('http://localhost:3001/treenit').then((response) => {
+      setTreenit(response.data)
+    })
+  }, [])
 
   const poistaTreeni = (id) => setTreenit(treenit.filter((a) => a.id !== id))
 
@@ -32,10 +34,18 @@ function App() {
     0
   )
 
-  const lisaaTreeni = () => (
-    setTreenit([...treenit, { id: Id, laji: uusiTreeni, kesto: 10 }]),
-    setId(Id + 1)
-  )
+  const lisaaTreeni = (event) => {
+    event.preventDefault()
+    const treeniObject = {
+      laji: uusiTreeni,
+      kesto: 10,
+    }
+    axios
+      .post('http://localhost:3001/treenit', treeniObject)
+      .then((response) => {
+        setTreenit(treenit.concat(response.data))
+      })
+  }
 
   return (
     <>
@@ -49,7 +59,7 @@ function App() {
       </div>
       <h1>Vite + React</h1>
       <div className="card">
-        <form>
+        <form onSubmit={lisaaTreeni}>
           <label>
             Lisää treeni:
             <input
@@ -58,13 +68,10 @@ function App() {
               onChange={(e) => setUusiTreeni(e.target.value)}
             />
           </label>
+          <button>Lisää treeni</button>
         </form>
-        <button onClick={lisaaTreeni}>Lisää treeni</button>
         <ul>{treenitLista}</ul>
         Yhteensä {listaSumma}
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
       </div>
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
