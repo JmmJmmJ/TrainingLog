@@ -20,9 +20,15 @@ const add = (treeniObject) => {
   return request.then((response) => response.data)
 }
 
+const edit = (id, treeniObject) => {
+  const request = axios.put(`${baseUrl}/${id}`, treeniObject)
+  return request.then((response) => response.data)
+}
+
 export default {
   getAll,
   getById,
   remove,
   add,
+  edit,
 }

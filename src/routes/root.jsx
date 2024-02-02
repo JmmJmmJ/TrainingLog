@@ -6,7 +6,8 @@ import Treeni from '../components/Treeni'
 
 function Root() {
   const [treenit, setTreenit] = useState([])
-  const [uusiTreeni, setUusiTreeni] = useState(0)
+  const [uusiTreeni, setUusiTreeni] = useState('')
+  const [uusiTreeniKesto, setUusiTreeniKesto] = useState('')
 
   useEffect(() => {
     treeniService.getAll().then((treenit) => {
@@ -32,13 +33,11 @@ function Root() {
     event.preventDefault()
     const treeniObject = {
       laji: uusiTreeni,
-      kesto: 10,
+      kesto: parseInt(uusiTreeniKesto),
     }
-    axios
-      .post('http://localhost:3001/treenit', treeniObject)
-      .then((response) => {
-        setTreenit(treenit.concat(response.data))
-      })
+    treeniService.add(treeniObject).then((response) => {
+      setTreenit(treenit.concat(response))
+    })
   }
 
   return (
@@ -46,11 +45,15 @@ function Root() {
       <div className="card">
         <form onSubmit={lisaaTreeni}>
           <label>
-            Lisää treeni:
             <input
               type="text"
               value={uusiTreeni}
               onChange={(e) => setUusiTreeni(e.target.value)}
+            />
+            <input
+              type="text"
+              value={uusiTreeniKesto}
+              onChange={(e) => setUusiTreeniKesto(e.target.value)}
             />
           </label>
           <button>Lisää treeni</button>
